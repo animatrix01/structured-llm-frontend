@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { Check, Loader2, Wrench } from "lucide-react";
+import { Check, Loader2, Minus, Square, X, Wrench } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const steps = [
@@ -18,6 +18,7 @@ type Status = "idle" | "active" | "done";
 
 export function PipelinePanel() {
   const [index, setIndex] = useState(0);
+  const [isWindows, setIsWindows] = useState(false);
 
   useEffect(() => {
     const t = window.setInterval(() => {
@@ -33,17 +34,65 @@ export function PipelinePanel() {
 
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-card shadow-elevated">
-      {/* window chrome */}
-      <div className="flex items-center gap-3 border-b border-border bg-background/40 px-4 py-3">
-        <div className="flex items-center gap-1.5">
-          <span className="size-3 rounded-full bg-destructive/70" />
-          <span className="size-3 rounded-full bg-chart-4/70" />
-          <span className="size-3 rounded-full bg-success/70" />
-        </div>
-        <p className="flex-1 text-center font-mono text-xs text-muted-foreground">
-          llm-reliability-engine
-        </p>
-        <span className="w-14" />
+      {/* window chrome — click to toggle macOS ↔ Windows */}
+      <div
+        role="button"
+        tabIndex={0}
+        aria-label={`Switch to ${isWindows ? "macOS" : "Windows"} style`}
+        onClick={() => setIsWindows((v) => !v)}
+        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && setIsWindows((v) => !v)}
+        className="flex cursor-pointer select-none items-center border-b border-border bg-background/40 transition-colors duration-150 hover:bg-secondary/30"
+      >
+        {isWindows ? (
+          /* ── Windows chrome ── */
+          <>
+            <p className="flex-1 px-4 py-3 font-mono text-xs text-muted-foreground">
+              llm-reliability-engine
+            </p>
+            <div className="flex h-full items-stretch">
+              <button
+                type="button"
+                aria-label="Minimise"
+                tabIndex={-1}
+                onClick={(e) => e.stopPropagation()}
+                className="flex w-11 items-center justify-center py-3 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              >
+                <Minus className="size-3.5" />
+              </button>
+              <button
+                type="button"
+                aria-label="Maximise"
+                tabIndex={-1}
+                onClick={(e) => e.stopPropagation()}
+                className="flex w-11 items-center justify-center py-3 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              >
+                <Square className="size-3" />
+              </button>
+              <button
+                type="button"
+                aria-label="Close"
+                tabIndex={-1}
+                onClick={(e) => e.stopPropagation()}
+                className="flex w-11 items-center justify-center py-3 text-muted-foreground transition-colors hover:bg-destructive hover:text-white"
+              >
+                <X className="size-3.5" />
+              </button>
+            </div>
+          </>
+        ) : (
+          /* ── macOS chrome ── */
+          <>
+            <div className="flex items-center gap-1.5 px-4 py-3">
+              <span className="size-3 rounded-full bg-destructive/70" />
+              <span className="size-3 rounded-full bg-chart-4/70" />
+              <span className="size-3 rounded-full bg-success/70" />
+            </div>
+            <p className="flex-1 text-center font-mono text-xs text-muted-foreground">
+              llm-reliability-engine
+            </p>
+            <span className="w-14" />
+          </>
+        )}
       </div>
 
       <div className="grid gap-0 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)]">
