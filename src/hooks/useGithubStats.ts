@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const GITHUB_REPO = "1divyanshdev/llm-reliability-engine";
+export const GITHUB_REPO = "animatrix01/structured-llm-frontend";
 export const GITHUB_URL = `https://github.com/${GITHUB_REPO}`;
 
 export type GithubStats = {
