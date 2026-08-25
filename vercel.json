@@ -1,7 +1,16 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": ".vercel/output",
-  "env": {
-    "NITRO_PRESET": "vercel"
-  }
+  "outputDirectory": "dist/client",
+  "functions": {
+    "api/ssr.js": {
+      "runtime": "nodejs20.x",
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/ssr"
+    }
+  ]
 }
